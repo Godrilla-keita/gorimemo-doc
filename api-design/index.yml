@@ -6,11 +6,21 @@ info:
 servers:
   - url: http://hopgn.godrilla.com/v1
     description: 今後設定する本番環境ベースURL
+  - url: http://localhost:8080/v1
+    description: 今後設定する開発環境ベースURL
 paths:
   /{user_id}/posts:
     get:
       summary: 投稿されたメモのリストを取得する
       description: メモは要約レベルで全件取得し、フロントエンドでソートや検索を行う
+      parameters: # リクエストパラメータ
+        - name: user_id
+          in: path # パラメータをパス内に含める
+          description: ユーザー固有のID
+          required: true
+          schema:
+            type: string
+
       responses:
         '200':
           description: メモデータの取得に成功
