@@ -1,5 +1,19 @@
 # 設計
 
+## 構成
+### バックエンド
+* Java SE 17 (Open JDK)
+  * v0.0.0
+* Spring Boot
+  * v0.0.0
+
+### フロントエンド
+* vue.js
+  * v0.0.0
+* vuetify
+  * v0.0.0
+* 
+
 ## データベース設計
 [詳細はこちら](./database-design/index.md)
 
