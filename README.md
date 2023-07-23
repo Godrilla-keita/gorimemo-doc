@@ -44,3 +44,7 @@ npm i -g widdershins
 # 変換実行
 npx widdershins --omitHeader --code true .\api-design\index.yml .\api-design\index.md
 ```
+
+### API設計のルール
+以下を参考にしたい。
+https://future-architect.github.io/articles/20200409/
