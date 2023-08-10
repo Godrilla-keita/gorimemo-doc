@@ -2,9 +2,9 @@
 
 ```mermaid
 erDiagram
-  users ||--o{ memos : ""
-  memos ||--|{ pages : ""
-  memos ||--|( icons : ""
+  users |--o{ memos : ""
+  memos |--|{ pages : ""
+  memos |--| icons : ""
 
   users {
     string user_id PK
