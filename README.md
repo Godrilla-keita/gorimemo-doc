@@ -15,7 +15,7 @@
 * 
 
 ## データベース設計
-[詳細はこちら](./database-design/index.md)
+[詳細はこちら](./database-design/dbDesign.md)
 
 ## 画面設計
 * [サンプル画面](./screen-layout/template.md)
