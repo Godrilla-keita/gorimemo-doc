@@ -3,7 +3,7 @@
 ```mermaid
 erDiagram
   users ||--o{ memos : ""
-  users ||--|| sessions ""
+  users ||--|| sessions : ""
   memos ||--|{ pages : ""
   memos ||--o| icons : ""
   icons ||--|{ files : ""
