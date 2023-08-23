@@ -8,19 +8,23 @@ servers:
     description: 今後設定する本番環境ベースURL
   - url: http://localhost:8080/v1
     description: 今後設定する開発環境ベースURL
-  
+    
 # -------------------------------------------
 # 以下を参考にAPI設計を行う
 # https://future-architect.github.io/articles/20200409/
 # -------------------------------------------
 paths:
-  /{user_id}/posts:
+  /user/{user_id}/memos:
     get:
-      summary: 投稿されたメモのリストを取得する
+      summary: メモのリストを取得
       description: メモは要約レベルで全件取得し、フロントエンドでソートや検索を行う
-      parameters: # リクエストパラメータ
+
+      # リクエストパラメーター
+      parameters:
+
         - name: user_id
-          in: path # パラメータをパス内に含める
+          # URLパスに含まれている文字列を使うので、 'in: path'を指定
+          in: path
           description: ユーザー固有のID
           required: true
           schema:
@@ -35,14 +39,73 @@ paths:
                 type: array
                 items: 
                   $ref: "#/components/schemas/MemoSummary"
+        '400':
+          description: 不正なパラメーターが指定された場合
+          content:
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/ErrorResponse"
         '404':
           description: ユーザーが見つからなかった場合のエラー
           content:
             application/json:
               schema: 
                 $ref: "#/components/schemas/ErrorResponse"
+        '500':
+          description: データベースエラーなど、ユーザーがハンドリング不能なエラー
+          content:
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /memo:
+    post:
+      summary: メモを新規作成する
+      description: メモを新規作成する ユーザー情報ははベアラートークンから逆引きする
+
+      # これを指定するとBearerトークン必須のAPIとなる(つまりログイン状態でしか実行できないAPIになる)
+      security:
+        - BearerAuth:
+          - user
+
+      # リクエストBody
+      requestBody: 
+        description: メモデータの内容
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PostMemoRequestData"
+
+      responses:
+        '201':
+          description: メモデータの作成に成功
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  $ref: "#/components/schemas/MemoSummary"
+        '401':
+          description: ログインしていなかった場合のエラー
+          content:
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/ErrorResponse"
+        '500':
+          description: データベースエラーなど、ユーザーがハンドリング不能なエラー
+          content:
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/ErrorResponse"
 
 components:
+  securitySchemes:
+    # 参考: Bearer認証について
+    # https://qiita.com/h_tyokinuhata/items/ab8e0337085997be04b1
+    BearerAuth:
+      type: http
+      scheme: bearer
+
   schemas:
     ErrorResponse:
       properties:
@@ -61,6 +124,65 @@ components:
           type: string
           example: "85932a90-17dc-20ba-d20b-40fcf748b8b8"
           description: メモID
+        title:
+          type: string
+          example: "カズヤの即死コンボ解説"
+          description: エラーメッセージ
+        description:
+          type: string
+          example: "回避が遅いキャラに対して、掴みからワンターンキルする方法を解説します"
+          description: 説明文
+        param_name_1:
+          type: number
+          example: "難易度"
+          description: パラメータ名
+        param_name_2:
+          type: number
+          example: "安定度"
+          description: パラメータ名
+        param_name_3:
+          type: number
+          example: "気持ちよさ"
+          description: パラメータ名
+        param_name_4:
+          type: number
+          example: "平均火力"
+          description: パラメータ名
+        param_name_5:
+          type: number
+          example: "最大火力"
+          description: パラメータ名
+        param_name_6:
+          type: number
+          example: "コントローラへの被害"
+          description: パラメータ名
+        param_val_1:
+          type: number
+          example: 50
+          description: パラメータ値
+        param_val_2:
+          type: number
+          example: 70
+          description: パラメータ値
+        param_val_3:
+          type: number
+          example: 100
+          description: パラメータ値
+        param_val_4:
+          type: number
+          example: 100
+          description: パラメータ値
+        param_val_5:
+          type: number
+          example: 100
+          description: パラメータ値
+        param_val_6:
+          type: number
+          example: 100
+          description: パラメータ値
+          
+    PostMemoRequestData:
+      properties:
         title:
           type: string
           example: "カズヤの即死コンボ解説"
